@@ -1,8 +1,8 @@
-from db import db
-from model import Product
+from .db import db
+from .model import Product
 from flask import jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from image_path import save_image
+from .image_path import save_image
 from datetime import datetime 
 
 
