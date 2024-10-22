@@ -1,4 +1,4 @@
-from db import db
+from .db import db
 from sqlalchemy import Integer, String, Column, Float, Boolean, ForeignKey, BINARY
 from sqlalchemy.orm import relationship
 from datetime import datetime, timedelta
