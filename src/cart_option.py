@@ -1,5 +1,5 @@
 from flask import jsonify, request, session
-from model import PCart
+from .model import PCart
 from flask_sqlalchemy import SQLAlchemy
 
 class CartOption:
