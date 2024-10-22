@@ -55,4 +55,4 @@ if __name__ == '__main__':
         db.create_all()
         app.config['cartOption'].delete_guest_cart()
     CORS(app, supports_credentials=True)
-    app.run(debug= True, port= 5000)
+   # app.run(debug= True, port= 5000)
