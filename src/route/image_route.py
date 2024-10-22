@@ -1,5 +1,5 @@
 from flask import send_from_directory, jsonify, Blueprint
-from .model import User, Product
+from src.model import User, Product
 
 image_r = Blueprint('image_route', __name__)
 
