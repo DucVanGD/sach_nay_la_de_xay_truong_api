@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, url_for,request,session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, text
@@ -20,17 +21,17 @@ from os import path
 def create_app():
     app = Flask(__name__)
     #Database
-    app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///user (1).db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///user (1).db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     engine = create_engine('sqlite:///user (1).db')
     # Cấu hình session
-    app.config['SECRET_KEY'] = '8SIAs98h9sd9198gs*^G^@hs'  # Key bí mật
-    app.config['SESSION_TYPE'] = 'filesystem'  # Hoặc 'redis', 'memcached', v.v.
-    app.config['SESSION_PERMANENT'] = True  # Không lưu session vĩnh viễn
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', '8SIAs98h9sd9198gs*^G^@hs')  # Key bí mật
+    app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE', 'filesystem')  # Hoặc 'redis', 'memcached', v.v.
+    app.config['SESSION_PERMANENT'] = os.getenv('SESSION_PERMANENT', 'True') == 'True'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)  # Thời gian sống của session
     # Cấu hình session cookie
-    app.config['SESSION_COOKIE_SECURE'] = True   # Nếu không dùng HTTPS, hãy để False
+    app.config['SESSION_COOKIE_SECURE'] = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'   # Nếu không dùng HTTPS, hãy để False
     app.config['SESSION_COOKIE_HTTPONLY'] = True  # Chỉ cho phép truy cập session qua HTTP, không qua JavaScript
     app.config['SESSION_COOKIE_SAMESITE'] = 'None'  # Cấu hình chính sách cross-site
     app.config['SESSION_UID'] = 0
