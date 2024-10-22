@@ -1,5 +1,5 @@
 from flask import jsonify, request,session
-from model import Bill, Product
+from .model import Bill, Product
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import re
