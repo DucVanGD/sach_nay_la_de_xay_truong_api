@@ -3,19 +3,19 @@ from flask import Flask, jsonify, url_for,request,session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, text
 from flask_cors import CORS
-from cart_option import CartOption
-from user_option import User_option 
-from product_option import Prod
-from bill_option import Bill_Option
+from .cart_option import CartOption
+from .user_option import User_option 
+from .product_option import Prod
+from .bill_option import Bill_Option
 from datetime import timedelta
 from flask_session import Session
-from db import db
-from route.home import home
-from route.product_route import product_route
-from route.cart_route import cart_route
-from route.account_route import acc_route
-from route.image_route import image_r
-from route.bill_route import bill_route
+from .db import db
+from .route.home import home
+from .route.product_route import product_route
+from .route.cart_route import cart_route
+from .route.account_route import acc_route
+from .route.image_route import image_r
+from .route.bill_route import bill_route
 from os import path
 
 def create_app():
