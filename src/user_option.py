@@ -1,6 +1,6 @@
 from flask import jsonify, request, session
 from .model import User
-from .flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from .image_path import save_image
 from sqlalchemy import Integer, String, Column, ForeignKey, text, inspect
 from datetime import datetime, timedelta
