@@ -20,6 +20,7 @@ from os import path
 
 def create_app():
     app = Flask(__name__)
+    CORS(app, supports_credentials=True)
     #Database
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///user (1).db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -54,5 +55,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         app.config['cartOption'].delete_guest_cart()
-    CORS(app, supports_credentials=True)
+    
    # app.run(debug= True, port= 5000)
