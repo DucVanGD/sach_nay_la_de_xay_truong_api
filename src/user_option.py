@@ -1,10 +1,11 @@
 from flask import jsonify, request, session
-from .model import User
+from model import User
 from flask_sqlalchemy import SQLAlchemy
-from .image_path import save_image
+from image_path import save_image
 from sqlalchemy import Integer, String, Column, ForeignKey, text, inspect
 from datetime import datetime, timedelta
 import bcrypt
+from sqlalchemy.exc import IntegrityError
 import re
 
 def validate_email_phone(email_phone):
@@ -152,28 +153,43 @@ class User_option:
             return jsonify(str(e)), 500
         
     def profile(self, user_id=0):
-        user = User.query.get(user_id)
-        print(user_id)
+        if user_id is None:
+            user_id = 0
+        user = User.query.get(int(user_id))
         if not user:
-            return jsonify("Không tìm thấy người dùng")
+            self.delete_guest()
+            self.create_guest()
+            user = User.query.get(0)
         return jsonify(user.to_dict()), 200
 
     def logout(self):
-        session.pop('user_id', None)  # Xóa user_id khỏi session
+        session.pop('user_id', 0)  # Xóa user_id khỏi session
         return jsonify("Đăng xuất thành công"), 200
-    def create_guest(self):
+    def delete_guest(self):
         user = User.query.get(0)
         if user:
             self.db.session.delete(user)
+            self.db.session.flush()
             self.db.session.commit() 
-        user = User(
-            id = 0,
-            username = 'Guest',
-            password =  bcrypt.hashpw('Taikhoankhach'.encode('utf-8'), bcrypt.gensalt()),
-            img='default_user.jpg',  # Hình ảnh mặc định
-            email = '',
-            phone = ''
-        )
-        self.db.session.add(user)
-        self.db.session.commit()
+            print("da xoa\n")
+            return None
+    def create_guest(self):
+        try:
+            user = User(
+                id=0,
+                username='Guest',
+                password=bcrypt.hashpw('Taikhoankhach'.encode('utf-8'), bcrypt.gensalt()),
+                img='default_user.jpg',  # Hình ảnh mặc định
+                email='',
+                phone=''
+            )
+            self.db.session.add(user)
+            self.db.session.commit()  # Commit sau khi thêm người dùng
+            return jsonify('Tạo guest thành công'), 200
+        except IntegrityError as e:
+            self.db.session.rollback()  # Rollback nếu vi phạm ràng buộc UNIQUE
+            return jsonify(f'Lỗi UNIQUE: {str(e)}'), 500
+        except Exception as e:
+            self.db.session.rollback()  # Rollback cho bất kỳ lỗi khác
+            return jsonify(f'Lỗi khi tạo guest: {str(e)}'), 500
 
